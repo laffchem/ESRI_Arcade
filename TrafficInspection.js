@@ -1,0 +1,107 @@
+/* Cabinet Inspection Scripts */
+
+// Last Inspection
+var relatedrecords = OrderBy(FeatureSetByRelationshipName($feature, "CabinetInspections"), "InspectDate DES");
+var cnt = Count(relatedrecords)
+var relatedinfo = "";
+if (cnt > 0) {
+  var info = First(relatedrecords);
+  relatedinfo = Text(ToLocal(info.InspectDate), "MM/DD/Y")
+} else {
+  relatedinfo = Text('Requires inspection!')
+}
+return relatedinfo;
+
+// Cabinet Inspection
+Proper($feature.CabinetCondition)
+
+// Five Year Inspection
+$feature.FiveYearInspectionLocation
+
+// Font Color - Inspection Date
+var relatedrecords = OrderBy(FeatureSetByRelationshipName($feature, "CabinetInspections"), "InspectDate DES");
+var cnt = Count(relatedrecords)
+var relatedinfo = "";
+var fontColor = "";
+if (cnt > 0) {
+  var info = First(relatedrecords);
+  relatedinfo = ToLocal(info.InspectDate)
+  var dateDifference = DateDiff(Now(), relatedinfo, 'months')
+  if(dateDifference < 1.5) {
+  fontColor = '69db7c'
+  } else if(dateDifference >= 1.5 && dateDifference < 3) {
+    fontColor = 'f76707'
+  } else {
+    fontColor = 'fa5252'
+  }
+} else {
+  fontColor = 'fa5252'
+}
+return fontColor;
+
+// Font Color - Cabinet Inspection
+var cabinetCondition = Proper($feature.CabinetCondition);
+var fontColor = "";
+
+if(cabinetCondition == 'Good' || cabinetCondition == 'New') {
+fontColor = '51cf66'
+} else if(cabinetCondition == 'Poor') {
+  fontColor = 'f76707'
+} 
+else {
+  fontColor = 'fa5252'
+}
+return fontColor;
+
+// Cabinet Life Expectancy
+var lifeExpectancy = Number($feature.LifeExpectancy);
+var timeSinceInstall = Floor(DateDiff(Now(), $feature.InstallDate, 'years'), 1);
+var timeToExpire = Floor(lifeExpectancy - timeSinceInstall, 1)
+
+if(IsNan(timeSinceInstall)) {
+  return Text('Please input an install date and life expectancy value into the database!')
+} else if(timeToExpire <= 0) {
+  return Text(`Cabinet is expired by ${-1 * timeToExpire} years according to FDOT Averages.`)
+} else {
+  return Text(`Cabinet has approximately ${timeToExpire} years left according to FDOT Averages.`)
+}
+
+// Pedestrian Condition
+if($feature.PedsCondition == '' || $feature.PedsCondition == null) {
+    return Text('There are no recorded pedestrian signals in the database.')
+  } else {
+    return Text(Proper($feature.PedsCondition))
+  }
+
+// Pedestrian Condition Font Color
+var pedsCondition = Proper($feature.PedsCondition);
+var fontColor = "";
+
+if(pedsCondition == 'Good' || pedsCondition == 'New') {
+fontColor = '51cf66'
+} else if(pedsCondition == 'Poor') {
+  fontColor = 'f76707'
+} 
+else {
+  fontColor = 'fa5252'
+}
+return fontColor;
+
+// Signal Life Expectancy
+var lifeExpectancy = Number($feature.LifeExpectancy);
+var timeSinceInstall = Floor(DateDiff(Now(), $feature.InstallDate, 'years'), 1);
+var timeToExpire = Floor(lifeExpectancy - timeSinceInstall, 1)
+
+if(IsNan(timeSinceInstall)) {
+  return Text('Please input an install date and life expectancy value into the database!')
+} else if(timeToExpire <= 0) {
+  return Text(`Signals are expired by ${-1 * timeToExpire} years according to FDOT Averages.`)
+} else {
+  return Text(`Signals have approximately ${timeToExpire} years left before expiring according to FDOT Averages.`)
+}
+
+
+
+
+
+
