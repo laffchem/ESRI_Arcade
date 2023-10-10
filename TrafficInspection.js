@@ -1,3 +1,14 @@
+/* The purpose of this file is to save Esri Arcade Scripts to easily copy and paste between layers since they don't seem to have a user friendly library.
+***Note*** This is NOT a functioning JS file. This is a collection of scripts that are run individually apart from each other, which is why the var statement is used multiple times.
+*/
+/* Key
+Important / Urgently Needed: #fa5252
+Warning / Upcoming: #f76707
+Good / Recently Completed: #69db7c
+*/
+
+/* ***NOTE*** --- For each script, when defining the relationship you must confirm your table name is correct, and that your feature for the inspection date is correct or this will default to the else condition stating requires inspection, as there will be no data to pull!!! */
+
 /* Cabinet Inspection Scripts */
 
 // Last Inspection

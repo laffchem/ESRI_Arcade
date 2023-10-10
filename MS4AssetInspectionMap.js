@@ -9,6 +9,7 @@ Good / Recently Completed: #69db7c
 
 /* ***NOTE*** --- For each script, when defining the relationship you must confirm your table name is correct, and that your feature for the inspection date is correct or this will default to the else condition stating requires inspection, as there will be no data to pull!!! */
 
+/* MS4 Inspections Scripts */
 
 /* Recent Inspections Script
 This script is for detecting recent inspections that have occured from the survey 123 for each layer. */
