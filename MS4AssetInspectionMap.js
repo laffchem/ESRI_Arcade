@@ -9,7 +9,6 @@ Good / Recently Completed: #69db7c
 
 /* ***NOTE*** --- For each script, when defining the relationship you must confirm your table name is correct, and that your feature for the inspection date is correct or this will default to the else condition stating requires inspection, as there will be no data to pull!!! */
 
-/* MS4 Inspections Scripts */
 
 /* Recent Inspections Script
 This script is for detecting recent inspections that have occured from the survey 123 for each layer. */
@@ -131,3 +130,58 @@ if (cnt > 0) {
     fontColor = 'fa5252'
 }
 return fontColor;
+
+// Maintenance Scripts
+// ***********************************************************
+
+// Last Maintenance Date
+var relatedrecords = OrderBy(FeatureSetByRelationshipName($feature, "ManholeMaintenance"), "MaintenanceDate DES");
+var cnt = Count(relatedrecords)
+var relatedinfo = "";
+if (cnt > 0) {
+  var info = First(relatedrecords);
+  relatedinfo = Text(ToLocal(info.MaintenanceDate), "MM/DD/Y")
+} else {
+  relatedinfo = Text('No maintenance recorded in Survey123!')
+}
+return relatedinfo;
+
+// Find Latest GUID
+var relatedrecords = OrderBy(FeatureSetByRelationshipName($feature, "ManholeMaintenance"), "MaintenanceDate DES");
+var cnt = Count(relatedrecords)
+var relatedinfo = "";
+if (cnt > 0) {
+  var info = First(relatedrecords);
+  relatedinfo = Text(info.GUID)
+} else {
+  relatedinfo = Text('#')
+}
+return relatedinfo
+
+// Find Latest ObjectID
+var relatedrecords = OrderBy(FeatureSetByRelationshipName($feature, "ManholeMaintenance"), "MaintenanceDate DES");
+var cnt = Count(relatedrecords)
+var relatedinfo = "";
+if (cnt > 0) {
+  var info = First(relatedrecords);
+  relatedinfo = Text(info.OBJECTID)
+} else {
+  relatedinfo = Text('#')
+}
+return relatedinfo
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Joined layer inspection age text box
+var inspectionAge = DateDiff(Now(), $feature.InspectDate, 'years');
+var inspectionDue = round(5 - inspectionAge, 2);
+
+return inspectionDue;
+
+// Symbology Expression
+var inspectionAge = DateDiff(Now(), $feature.InspectDate, 'years');
+if (inspectionAge >= 5) {
+  return 'Requires Inspection';
+} else {
+  return 'Inspected';
+}
